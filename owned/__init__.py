@@ -27,9 +27,31 @@ Helper Functions:
 - unweave_content(woven_bytes): Recovers content and metadata from woven bytes.
 - Additional internal functions for file handling and directory creation.
 
-Example Tests:
--------------
-Simple pytest-based test functions demonstrate usage and correctness.
+Examples:
+---------
+
+>>> from owned import store_content, unweave_content
+>>> import os
+
+>>> # Store some content (with weaving) and get its hash key
+>>> test_content = b"Hello, doctest!"
+>>> key = store_content(test_content, extra_info=b"Extra info", use_weave=True)
+
+>>> # Verify the file exists in ~/.config/owned
+>>> file_path = os.path.expanduser(f"~/.config/owned/{key}")
+>>> assert os.path.isfile(file_path)
+
+>>> # Check the length of the SHA256 hash (64 hex chars)
+>>> assert len(key) == 64
+
+>>> # Read the stored file and unweave the content
+>>> with open(file_path, "rb") as f:
+...     woven_data = f.read()
+>>> original_content = unweave_content(woven_data)
+>>> original_content == test_content
+True
+
+
 """
 
 import os
