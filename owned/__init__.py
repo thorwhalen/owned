@@ -88,7 +88,7 @@ def sha256_hash(content: bytes) -> str:
 DFLT_HASH = sha256_hash
 
 # Default storage directory
-DEFAULT_STORAGE_DIR = Path.home() / ".config" / "owned"
+DEFAULT_STORAGE_DIR = Path.home() / '.config' / 'owned'
 
 
 ########################################################################
@@ -111,9 +111,9 @@ def weave_content(content: bytes, extra_info: bytes = None) -> bytes:
     additional embedded data.
     """
     if HeadWeaver is None:
-        raise ImportError("owner library is not installed or not accessible.")
+        raise ImportError('owner library is not installed or not accessible.')
     weaver = HeadWeaver()
-    woven_bytes = weaver.weave(content, extra_info if extra_info else b"")
+    woven_bytes = weaver.weave(content, extra_info if extra_info else b'')
     return woven_bytes
 
 
@@ -124,7 +124,7 @@ def unweave_content(woven_bytes: bytes):
     functionalities but is provided for completeness and verification.
     """
     if HeadWeaver is None:
-        raise ImportError("owner library is not installed or not accessible.")
+        raise ImportError('owner library is not installed or not accessible.')
     weaver = HeadWeaver()
     return weaver.unweave(woven_bytes)
 
@@ -212,15 +212,15 @@ def post_hash_to_blockchain(
         or None if web3.py is not installed or if insufficient parameters were provided.
     """
     if Web3 is None:
-        raise ImportError("web3.py is not installed or not accessible.")
+        raise ImportError('web3.py is not installed or not accessible.')
 
     w3 = Web3(Web3.HTTPProvider(provider_uri))
     if not w3.isConnected():
-        raise ConnectionError(f"Cannot connect to Ethereum node at {provider_uri}")
+        raise ConnectionError(f'Cannot connect to Ethereum node at {provider_uri}')
 
     if not from_address or not private_key:
         raise ValueError(
-            "from_address and private_key must be provided to sign transactions."
+            'from_address and private_key must be provided to sign transactions.'
         )
 
     nonce = w3.eth.getTransactionCount(from_address)
@@ -270,11 +270,11 @@ def verify_hash_on_blockchain(
         Each dict may contain information such as blockNumber, transactionHash, etc.
     """
     if Web3 is None:
-        raise ImportError("web3.py is not installed or not accessible.")
+        raise ImportError('web3.py is not installed or not accessible.')
 
     w3 = Web3(Web3.HTTPProvider(provider_uri))
     if not w3.isConnected():
-        raise ConnectionError(f"Cannot connect to Ethereum node at {provider_uri}")
+        raise ConnectionError(f'Cannot connect to Ethereum node at {provider_uri}')
 
     current_block = w3.eth.blockNumber
     earliest_block = max(0, current_block - lookback_blocks)
@@ -308,13 +308,13 @@ def test_store_content_plain():
     Tests storing unmodified content (no weaving). Asserts that the returned
     hash matches the actual content hash, and that a file is created.
     """
-    test_data = b"hello world"
+    test_data = b'hello world'
     hash_key = store_content(test_data, use_weave=False)
-    assert os.path.exists(DEFAULT_STORAGE_DIR / hash_key), "File was not stored."
+    assert os.path.exists(DEFAULT_STORAGE_DIR / hash_key), 'File was not stored.'
     # Verify that re-hashing the stored file yields the same key
     with open(DEFAULT_STORAGE_DIR / hash_key, 'rb') as f:
         actual_data = f.read()
-    assert sha256_hash(actual_data) == hash_key, "Hash mismatch for stored file."
+    assert sha256_hash(actual_data) == hash_key, 'Hash mismatch for stored file.'
 
 
 def test_store_content_woven():
@@ -323,15 +323,15 @@ def test_store_content_woven():
     the hash of the woven result and that the unweave function can recover
     the original content.
     """
-    test_data = b"bob and alice"
-    hash_key = store_content(test_data, extra_info=b"my secret", use_weave=True)
-    assert os.path.exists(DEFAULT_STORAGE_DIR / hash_key), "File was not stored."
+    test_data = b'bob and alice'
+    hash_key = store_content(test_data, extra_info=b'my secret', use_weave=True)
+    assert os.path.exists(DEFAULT_STORAGE_DIR / hash_key), 'File was not stored.'
 
     # Validate weaving/unweaving
     with open(DEFAULT_STORAGE_DIR / hash_key, 'rb') as f:
         stored_data = f.read()
     original = unweave_content(stored_data)
-    assert original == test_data, "Woven/unwoven content does not match original."
+    assert original == test_data, 'Woven/unwoven content does not match original.'
 
 
 def test_post_and_verify_hash_on_blockchain():
@@ -344,7 +344,7 @@ def test_post_and_verify_hash_on_blockchain():
         # web3.py not installed; skip
         return
 
-    sample_hash = "abc123def456"
+    sample_hash = 'abc123def456'
     # The following call will require a valid from_address and private key
     # post_hash_to_blockchain(hash_str=sample_hash, from_address="0x...", private_key="...")
 
