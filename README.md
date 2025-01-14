@@ -8,7 +8,6 @@ verification. Includes helper functions to verify the posting of hashes on the b
 
 To install:	```pip install owned```
 
-
 # Main Functionalities
 
 
