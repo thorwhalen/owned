@@ -1,0 +1,312 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>owned &mdash; owned 0.0.5 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=282f96c0"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Welcome to owned’s documentation!" href="../index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            owned
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">owned</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#main-functionalities">Main Functionalities:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#helper-functions">Helper Functions:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#examples">Examples:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#owned.DFLT_HASH"><code class="docutils literal notranslate"><span class="pre">DFLT_HASH()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#owned.post_hash_to_blockchain"><code class="docutils literal notranslate"><span class="pre">post_hash_to_blockchain()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#owned.sha256_hash"><code class="docutils literal notranslate"><span class="pre">sha256_hash()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#owned.store_content"><code class="docutils literal notranslate"><span class="pre">store_content()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#owned.test_post_and_verify_hash_on_blockchain"><code class="docutils literal notranslate"><span class="pre">test_post_and_verify_hash_on_blockchain()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#owned.test_store_content_plain"><code class="docutils literal notranslate"><span class="pre">test_store_content_plain()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#owned.test_store_content_woven"><code class="docutils literal notranslate"><span class="pre">test_store_content_woven()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#owned.unweave_content"><code class="docutils literal notranslate"><span class="pre">unweave_content()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#owned.verify_hash_on_blockchain"><code class="docutils literal notranslate"><span class="pre">verify_hash_on_blockchain()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#owned.weave_content"><code class="docutils literal notranslate"><span class="pre">weave_content()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">owned</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">owned</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/module_docs/owned.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-owned">
+<span id="owned"></span><h1>owned<a class="headerlink" href="#module-owned" title="Link to this heading"></a></h1>
+<p>owned.py</p>
+<p>A module that uses the ‘owner’ library to embed information into byte content (weaving)
+and store it locally, as well as post the resulting hash to a blockchain for ownership
+verification. Includes helper functions to verify the posting of hashes on the blockchain.</p>
+<section id="main-functionalities">
+<h2>Main Functionalities:<a class="headerlink" href="#main-functionalities" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p>store_content(content, …) -&gt; str
+- Optionally weaves metadata into the content (using ‘owner’) before storage.
+- Saves the content in the ~/.config/owned folder under a file name derived from its hash.
+- Returns the computed hash string (the ‘key’).</p></li>
+<li><p>post_hash_to_blockchain(hash_str, provider_uri=’<a class="reference external" href="http://127.0.0.1:8545">http://127.0.0.1:8545</a>’, …)
+- Posts the hash to a chosen blockchain via web3.py.
+- Returns transaction or logging information.</p></li>
+<li><p>verify_hash_on_blockchain(hash_str, provider_uri=’<a class="reference external" href="http://127.0.0.1:8545">http://127.0.0.1:8545</a>’, …)
+- Verifies that a particular hash has been posted on the blockchain.
+- Returns information such as block number, transaction details, or a boolean indicating presence.</p></li>
+</ol>
+</section>
+<section id="helper-functions">
+<h2>Helper Functions:<a class="headerlink" href="#helper-functions" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>DFLT_HASH: Default hashing function (sha256).</p></li>
+<li><p>weave_content(content, extra_info=None): Uses ‘owner.HeadWeaver’ to weave extra bytes into the content.</p></li>
+<li><p>unweave_content(woven_bytes): Recovers content and metadata from woven bytes.</p></li>
+<li><p>Additional internal functions for file handling and directory creation.</p></li>
+</ul>
+</section>
+<section id="examples">
+<h2>Examples:<a class="headerlink" href="#examples" title="Link to this heading"></a></h2>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">owned</span><span class="w"> </span><span class="kn">import</span> <span class="n">store_content</span><span class="p">,</span> <span class="n">unweave_content</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Store some content (with weaving) and get its hash key</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">test_content</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;Hello, doctest!&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">key</span> <span class="o">=</span> <span class="n">store_content</span><span class="p">(</span><span class="n">test_content</span><span class="p">,</span> <span class="n">extra_info</span><span class="o">=</span><span class="sa">b</span><span class="s2">&quot;Extra info&quot;</span><span class="p">,</span> <span class="n">use_weave</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Verify the file exists in ~/.config/owned</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;~/.config/owned/</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Check the length of the SHA256 hash (64 hex chars)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="o">==</span> <span class="mi">64</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Read the stored file and unweave the content</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">woven_data</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">original_content</span> <span class="o">=</span> <span class="n">unweave_content</span><span class="p">(</span><span class="n">woven_data</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">original_content</span> <span class="o">==</span> <span class="n">test_content</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+</section>
+<dl class="py function">
+<dt class="sig sig-object py" id="owned.DFLT_HASH">
+<span class="sig-prename descclassname"><span class="pre">owned.</span></span><span class="sig-name descname"><span class="pre">DFLT_HASH</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">content</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bytes</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#owned.DFLT_HASH" title="Link to this definition"></a></dt>
+<dd><p>Returns the SHA256 hex digest for the given content.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="owned.post_hash_to_blockchain">
+<span class="sig-prename descclassname"><span class="pre">owned.</span></span><span class="sig-name descname"><span class="pre">post_hash_to_blockchain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hash_str</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">provider_uri</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'http://127.0.0.1:8545'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">from_address</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">private_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gas</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">21000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gas_price</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/owned.html#post_hash_to_blockchain"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#owned.post_hash_to_blockchain" title="Link to this definition"></a></dt>
+<dd><p>Posts the given hash string to a blockchain using web3.py, embedding
+the hash as transaction data. Returns a transaction receipt or relevant
+logging info.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hash_str</strong> (<em>str</em>) – The hash to be recorded on the blockchain.</p></li>
+<li><p><strong>provider_uri</strong> (<em>str</em><em>, </em><em>optional</em>) – URI of the Ethereum node to connect to. Defaults to local Ganache.</p></li>
+<li><p><strong>from_address</strong> (<em>str</em><em>, </em><em>optional</em>) – Address from which to send the transaction. Required if signing locally.</p></li>
+<li><p><strong>private_key</strong> (<em>str</em><em>, </em><em>optional</em>) – Private key for the above from_address. Required if signing locally.</p></li>
+<li><p><strong>gas</strong> (<em>int</em><em>, </em><em>optional</em>) – Gas limit for the transaction. Defaults to 21000 (simple ETH transfer).</p></li>
+<li><p><strong>gas_price</strong> (<em>int</em><em>, </em><em>optional</em>) – Gas price in wei. If not provided, a default strategy may be used.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A transaction receipt dict if the transaction is sent successfully,
+or None if web3.py is not installed or if insufficient parameters were provided.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict or None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="owned.sha256_hash">
+<span class="sig-prename descclassname"><span class="pre">owned.</span></span><span class="sig-name descname"><span class="pre">sha256_hash</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">content</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bytes</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../_modules/owned.html#sha256_hash"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#owned.sha256_hash" title="Link to this definition"></a></dt>
+<dd><p>Returns the SHA256 hex digest for the given content.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="owned.store_content">
+<span class="sig-prename descclassname"><span class="pre">owned.</span></span><span class="sig-name descname"><span class="pre">store_content</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">content</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bytes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_info</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bytes</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_weave</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hasher</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;function</span> <span class="pre">sha256_hash&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">storage_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">PosixPath('/home/runner/.config/owned')</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../_modules/owned.html#store_content"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#owned.store_content" title="Link to this definition"></a></dt>
+<dd><p>Hashes the given content (optionally weaving extra_info into the content),
+stores it in the specified storage directory, and returns the computed hash
+(the ‘key’). The file name is the resulting hash.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>content</strong> (<em>bytes</em>) – The raw content to be stored.</p></li>
+<li><p><strong>extra_info</strong> (<em>bytes</em><em>, </em><em>optional</em>) – Additional metadata to weave into the content if use_weave is True.</p></li>
+<li><p><strong>use_weave</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, content is first woven with extra_info before hashing/storing.</p></li>
+<li><p><strong>hasher</strong> (<em>Callable</em><em>, </em><em>optional</em>) – Function that takes bytes and returns a hash string. Defaults to DFLT_HASH.</p></li>
+<li><p><strong>storage_dir</strong> (<em>str</em><em> or </em><em>Path</em><em>, </em><em>optional</em>) – Directory in which to store the content file. Defaults to DEFAULT_STORAGE_DIR.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The hash string (file name) under which the content is stored.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="owned.test_post_and_verify_hash_on_blockchain">
+<span class="sig-prename descclassname"><span class="pre">owned.</span></span><span class="sig-name descname"><span class="pre">test_post_and_verify_hash_on_blockchain</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/owned.html#test_post_and_verify_hash_on_blockchain"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#owned.test_post_and_verify_hash_on_blockchain" title="Link to this definition"></a></dt>
+<dd><p>This test checks whether a hash can be posted and then verified on the
+blockchain. These operations require a running Ethereum node and valid
+credentials. If web3 or a node is not available, this test will likely fail.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="owned.test_store_content_plain">
+<span class="sig-prename descclassname"><span class="pre">owned.</span></span><span class="sig-name descname"><span class="pre">test_store_content_plain</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/owned.html#test_store_content_plain"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#owned.test_store_content_plain" title="Link to this definition"></a></dt>
+<dd><p>Tests storing unmodified content (no weaving). Asserts that the returned
+hash matches the actual content hash, and that a file is created.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="owned.test_store_content_woven">
+<span class="sig-prename descclassname"><span class="pre">owned.</span></span><span class="sig-name descname"><span class="pre">test_store_content_woven</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/owned.html#test_store_content_woven"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#owned.test_store_content_woven" title="Link to this definition"></a></dt>
+<dd><p>Tests storing woven content. Asserts that the returned hash matches
+the hash of the woven result and that the unweave function can recover
+the original content.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="owned.unweave_content">
+<span class="sig-prename descclassname"><span class="pre">owned.</span></span><span class="sig-name descname"><span class="pre">unweave_content</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">woven_bytes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bytes</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/owned.html#unweave_content"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#owned.unweave_content" title="Link to this definition"></a></dt>
+<dd><p>Unweaves the provided bytes (created with weave_content) using owner.HeadWeaver.
+Returns the original content. This is not strictly required by the main
+functionalities but is provided for completeness and verification.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="owned.verify_hash_on_blockchain">
+<span class="sig-prename descclassname"><span class="pre">owned.</span></span><span class="sig-name descname"><span class="pre">verify_hash_on_blockchain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hash_str</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">provider_uri</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'http://127.0.0.1:8545'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lookback_blocks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/owned.html#verify_hash_on_blockchain"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#owned.verify_hash_on_blockchain" title="Link to this definition"></a></dt>
+<dd><p>Checks the blockchain for transactions embedding the specified hash string.
+Scans recent blocks (up to lookback_blocks). Returns a list of matches,
+where each match contains block number and transaction information.</p>
+<p>Note: This naive approach iterates over blocks in the given range. For
+production usage, an indexer or a more direct method is recommended.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hash_str</strong> (<em>str</em>) – The hash string to search for on the blockchain.</p></li>
+<li><p><strong>provider_uri</strong> (<em>str</em><em>, </em><em>optional</em>) – URI of the Ethereum node to connect to.</p></li>
+<li><p><strong>lookback_blocks</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of past blocks to scan from the latest block.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Each dict may contain information such as blockNumber, transactionHash, etc.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list of dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="owned.weave_content">
+<span class="sig-prename descclassname"><span class="pre">owned.</span></span><span class="sig-name descname"><span class="pre">weave_content</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">content</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bytes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_info</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bytes</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bytes</span></span></span><a class="reference internal" href="../_modules/owned.html#weave_content"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#owned.weave_content" title="Link to this definition"></a></dt>
+<dd><p>Weaves the content with optional extra_info using owner.HeadWeaver.
+Returns the woven bytes, which contain the original content plus
+additional embedded data.</p>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../index.html" class="btn btn-neutral float-left" title="Welcome to owned’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

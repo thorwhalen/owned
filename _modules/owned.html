@@ -1,0 +1,487 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>owned &mdash; owned 0.0.5 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=282f96c0"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            owned
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../module_docs/owned.html">owned</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">owned</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Module code</a></li>
+      <li class="breadcrumb-item active">owned</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for owned</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">owned.py</span>
+
+<span class="sd">A module that uses the &#39;owner&#39; library to embed information into byte content (weaving)</span>
+<span class="sd">and store it locally, as well as post the resulting hash to a blockchain for ownership</span>
+<span class="sd">verification. Includes helper functions to verify the posting of hashes on the blockchain.</span>
+
+<span class="sd">Main Functionalities:</span>
+<span class="sd">---------------------</span>
+<span class="sd">1) store_content(content, ...) -&gt; str</span>
+<span class="sd">   - Optionally weaves metadata into the content (using &#39;owner&#39;) before storage.</span>
+<span class="sd">   - Saves the content in the ~/.config/owned folder under a file name derived from its hash.</span>
+<span class="sd">   - Returns the computed hash string (the &#39;key&#39;).</span>
+
+<span class="sd">2) post_hash_to_blockchain(hash_str, provider_uri=&#39;http://127.0.0.1:8545&#39;, ...)</span>
+<span class="sd">   - Posts the hash to a chosen blockchain via web3.py.</span>
+<span class="sd">   - Returns transaction or logging information.</span>
+
+<span class="sd">3) verify_hash_on_blockchain(hash_str, provider_uri=&#39;http://127.0.0.1:8545&#39;, ...)</span>
+<span class="sd">   - Verifies that a particular hash has been posted on the blockchain.</span>
+<span class="sd">   - Returns information such as block number, transaction details, or a boolean indicating presence.</span>
+
+<span class="sd">Helper Functions:</span>
+<span class="sd">----------------</span>
+<span class="sd">- DFLT_HASH: Default hashing function (sha256).</span>
+<span class="sd">- weave_content(content, extra_info=None): Uses &#39;owner.HeadWeaver&#39; to weave extra bytes into the content.</span>
+<span class="sd">- unweave_content(woven_bytes): Recovers content and metadata from woven bytes.</span>
+<span class="sd">- Additional internal functions for file handling and directory creation.</span>
+
+<span class="sd">Examples:</span>
+<span class="sd">---------</span>
+
+<span class="sd">&gt;&gt;&gt; from owned import store_content, unweave_content</span>
+<span class="sd">&gt;&gt;&gt; import os</span>
+
+<span class="sd">&gt;&gt;&gt; # Store some content (with weaving) and get its hash key</span>
+<span class="sd">&gt;&gt;&gt; test_content = b&quot;Hello, doctest!&quot;</span>
+<span class="sd">&gt;&gt;&gt; key = store_content(test_content, extra_info=b&quot;Extra info&quot;, use_weave=True)</span>
+
+<span class="sd">&gt;&gt;&gt; # Verify the file exists in ~/.config/owned</span>
+<span class="sd">&gt;&gt;&gt; file_path = os.path.expanduser(f&quot;~/.config/owned/{key}&quot;)</span>
+<span class="sd">&gt;&gt;&gt; assert os.path.isfile(file_path)</span>
+
+<span class="sd">&gt;&gt;&gt; # Check the length of the SHA256 hash (64 hex chars)</span>
+<span class="sd">&gt;&gt;&gt; assert len(key) == 64</span>
+
+<span class="sd">&gt;&gt;&gt; # Read the stored file and unweave the content</span>
+<span class="sd">&gt;&gt;&gt; with open(file_path, &quot;rb&quot;) as f:</span>
+<span class="sd">...     woven_data = f.read()</span>
+<span class="sd">&gt;&gt;&gt; original_content = unweave_content(woven_data)</span>
+<span class="sd">&gt;&gt;&gt; original_content == test_content</span>
+<span class="sd">True</span>
+
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">hashlib</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="c1"># Blockchain tools (web3.py)</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">web3</span><span class="w"> </span><span class="kn">import</span> <span class="n">Web3</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="n">Web3</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="c1"># owner library for weaving/unweaving</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">owner</span><span class="w"> </span><span class="kn">import</span> <span class="n">HeadWeaver</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="n">HeadWeaver</span> <span class="o">=</span> <span class="kc">None</span>
+
+
+<span class="c1">########################################################################</span>
+<span class="c1"># Constants and Defaults</span>
+<span class="c1">########################################################################</span>
+
+
+<span class="c1"># Default hashing function: returns sha256 hex digest of the given content</span>
+<div class="viewcode-block" id="sha256_hash">
+<a class="viewcode-back" href="../module_docs/owned.html#owned.sha256_hash">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">sha256_hash</span><span class="p">(</span><span class="n">content</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns the SHA256 hex digest for the given content.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha256</span><span class="p">(</span><span class="n">content</span><span class="p">)</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span></div>
+
+
+
+<span class="n">DFLT_HASH</span> <span class="o">=</span> <span class="n">sha256_hash</span>
+
+<span class="c1"># Default storage directory</span>
+<span class="n">DEFAULT_STORAGE_DIR</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">home</span><span class="p">()</span> <span class="o">/</span> <span class="s2">&quot;.config&quot;</span> <span class="o">/</span> <span class="s2">&quot;owned&quot;</span>
+
+
+<span class="c1">########################################################################</span>
+<span class="c1"># Helper Functions</span>
+<span class="c1">########################################################################</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_ensure_storage_dir_exists</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Ensures that the default storage directory (DEFAULT_STORAGE_DIR) exists.</span>
+<span class="sd">    Creates it recursively if it does not exist.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">DEFAULT_STORAGE_DIR</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="weave_content">
+<a class="viewcode-back" href="../module_docs/owned.html#owned.weave_content">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">weave_content</span><span class="p">(</span><span class="n">content</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">,</span> <span class="n">extra_info</span><span class="p">:</span> <span class="nb">bytes</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Weaves the content with optional extra_info using owner.HeadWeaver.</span>
+<span class="sd">    Returns the woven bytes, which contain the original content plus</span>
+<span class="sd">    additional embedded data.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">HeadWeaver</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="s2">&quot;owner library is not installed or not accessible.&quot;</span><span class="p">)</span>
+    <span class="n">weaver</span> <span class="o">=</span> <span class="n">HeadWeaver</span><span class="p">()</span>
+    <span class="n">woven_bytes</span> <span class="o">=</span> <span class="n">weaver</span><span class="o">.</span><span class="n">weave</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="n">extra_info</span> <span class="k">if</span> <span class="n">extra_info</span> <span class="k">else</span> <span class="sa">b</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">woven_bytes</span></div>
+
+
+
+<div class="viewcode-block" id="unweave_content">
+<a class="viewcode-back" href="../module_docs/owned.html#owned.unweave_content">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">unweave_content</span><span class="p">(</span><span class="n">woven_bytes</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Unweaves the provided bytes (created with weave_content) using owner.HeadWeaver.</span>
+<span class="sd">    Returns the original content. This is not strictly required by the main</span>
+<span class="sd">    functionalities but is provided for completeness and verification.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">HeadWeaver</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="s2">&quot;owner library is not installed or not accessible.&quot;</span><span class="p">)</span>
+    <span class="n">weaver</span> <span class="o">=</span> <span class="n">HeadWeaver</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">weaver</span><span class="o">.</span><span class="n">unweave</span><span class="p">(</span><span class="n">woven_bytes</span><span class="p">)</span></div>
+
+
+
+<span class="c1">########################################################################</span>
+<span class="c1"># Core Functionalities</span>
+<span class="c1">########################################################################</span>
+
+
+<div class="viewcode-block" id="store_content">
+<a class="viewcode-back" href="../module_docs/owned.html#owned.store_content">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">store_content</span><span class="p">(</span>
+    <span class="n">content</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">,</span>
+    <span class="n">extra_info</span><span class="p">:</span> <span class="nb">bytes</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">use_weave</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">hasher</span><span class="o">=</span><span class="n">DFLT_HASH</span><span class="p">,</span>
+    <span class="n">storage_dir</span><span class="o">=</span><span class="n">DEFAULT_STORAGE_DIR</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Hashes the given content (optionally weaving extra_info into the content),</span>
+<span class="sd">    stores it in the specified storage directory, and returns the computed hash</span>
+<span class="sd">    (the &#39;key&#39;). The file name is the resulting hash.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    content : bytes</span>
+<span class="sd">        The raw content to be stored.</span>
+<span class="sd">    extra_info : bytes, optional</span>
+<span class="sd">        Additional metadata to weave into the content if use_weave is True.</span>
+<span class="sd">    use_weave : bool, optional</span>
+<span class="sd">        If True, content is first woven with extra_info before hashing/storing.</span>
+<span class="sd">    hasher : Callable, optional</span>
+<span class="sd">        Function that takes bytes and returns a hash string. Defaults to DFLT_HASH.</span>
+<span class="sd">    storage_dir : str or Path, optional</span>
+<span class="sd">        Directory in which to store the content file. Defaults to DEFAULT_STORAGE_DIR.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str</span>
+<span class="sd">        The hash string (file name) under which the content is stored.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_ensure_storage_dir_exists</span><span class="p">()</span>
+
+    <span class="n">final_content</span> <span class="o">=</span> <span class="n">weave_content</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="n">extra_info</span><span class="p">)</span> <span class="k">if</span> <span class="n">use_weave</span> <span class="k">else</span> <span class="n">content</span>
+    <span class="n">content_hash</span> <span class="o">=</span> <span class="n">hasher</span><span class="p">(</span><span class="n">final_content</span><span class="p">)</span>
+
+    <span class="n">file_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">storage_dir</span><span class="p">)</span> <span class="o">/</span> <span class="n">content_hash</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">file_path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">final_content</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">content_hash</span></div>
+
+
+
+<div class="viewcode-block" id="post_hash_to_blockchain">
+<a class="viewcode-back" href="../module_docs/owned.html#owned.post_hash_to_blockchain">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">post_hash_to_blockchain</span><span class="p">(</span>
+    <span class="n">hash_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">provider_uri</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;http://127.0.0.1:8545&quot;</span><span class="p">,</span>
+    <span class="n">from_address</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">private_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">gas</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">21000</span><span class="p">,</span>
+    <span class="n">gas_price</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Posts the given hash string to a blockchain using web3.py, embedding</span>
+<span class="sd">    the hash as transaction data. Returns a transaction receipt or relevant</span>
+<span class="sd">    logging info.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    hash_str : str</span>
+<span class="sd">        The hash to be recorded on the blockchain.</span>
+<span class="sd">    provider_uri : str, optional</span>
+<span class="sd">        URI of the Ethereum node to connect to. Defaults to local Ganache.</span>
+<span class="sd">    from_address : str, optional</span>
+<span class="sd">        Address from which to send the transaction. Required if signing locally.</span>
+<span class="sd">    private_key : str, optional</span>
+<span class="sd">        Private key for the above from_address. Required if signing locally.</span>
+<span class="sd">    gas : int, optional</span>
+<span class="sd">        Gas limit for the transaction. Defaults to 21000 (simple ETH transfer).</span>
+<span class="sd">    gas_price : int, optional</span>
+<span class="sd">        Gas price in wei. If not provided, a default strategy may be used.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    dict or None</span>
+<span class="sd">        A transaction receipt dict if the transaction is sent successfully,</span>
+<span class="sd">        or None if web3.py is not installed or if insufficient parameters were provided.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">Web3</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="s2">&quot;web3.py is not installed or not accessible.&quot;</span><span class="p">)</span>
+
+    <span class="n">w3</span> <span class="o">=</span> <span class="n">Web3</span><span class="p">(</span><span class="n">Web3</span><span class="o">.</span><span class="n">HTTPProvider</span><span class="p">(</span><span class="n">provider_uri</span><span class="p">))</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">w3</span><span class="o">.</span><span class="n">isConnected</span><span class="p">():</span>
+        <span class="k">raise</span> <span class="ne">ConnectionError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cannot connect to Ethereum node at </span><span class="si">{</span><span class="n">provider_uri</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">from_address</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">private_key</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;from_address and private_key must be provided to sign transactions.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="n">nonce</span> <span class="o">=</span> <span class="n">w3</span><span class="o">.</span><span class="n">eth</span><span class="o">.</span><span class="n">getTransactionCount</span><span class="p">(</span><span class="n">from_address</span><span class="p">)</span>
+
+    <span class="n">tx</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;nonce&quot;</span><span class="p">:</span> <span class="n">nonce</span><span class="p">,</span>
+        <span class="s2">&quot;to&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>  <span class="c1"># No recipient (contract creation not required), just storing data in &#39;data&#39; field</span>
+        <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s2">&quot;gas&quot;</span><span class="p">:</span> <span class="n">gas</span><span class="p">,</span>
+        <span class="s2">&quot;gasPrice&quot;</span><span class="p">:</span> <span class="n">gas_price</span> <span class="k">if</span> <span class="n">gas_price</span> <span class="k">else</span> <span class="n">w3</span><span class="o">.</span><span class="n">eth</span><span class="o">.</span><span class="n">gasPrice</span><span class="p">,</span>
+        <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">w3</span><span class="o">.</span><span class="n">toHex</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">hash_str</span><span class="p">),</span>
+        <span class="s2">&quot;chainId&quot;</span><span class="p">:</span> <span class="n">w3</span><span class="o">.</span><span class="n">eth</span><span class="o">.</span><span class="n">chainId</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="n">signed_tx</span> <span class="o">=</span> <span class="n">w3</span><span class="o">.</span><span class="n">eth</span><span class="o">.</span><span class="n">account</span><span class="o">.</span><span class="n">sign_transaction</span><span class="p">(</span><span class="n">tx</span><span class="p">,</span> <span class="n">private_key</span><span class="o">=</span><span class="n">private_key</span><span class="p">)</span>
+    <span class="n">tx_hash</span> <span class="o">=</span> <span class="n">w3</span><span class="o">.</span><span class="n">eth</span><span class="o">.</span><span class="n">sendRawTransaction</span><span class="p">(</span><span class="n">signed_tx</span><span class="o">.</span><span class="n">rawTransaction</span><span class="p">)</span>
+    <span class="n">receipt</span> <span class="o">=</span> <span class="n">w3</span><span class="o">.</span><span class="n">eth</span><span class="o">.</span><span class="n">waitForTransactionReceipt</span><span class="p">(</span><span class="n">tx_hash</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">receipt</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="verify_hash_on_blockchain">
+<a class="viewcode-back" href="../module_docs/owned.html#owned.verify_hash_on_blockchain">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">verify_hash_on_blockchain</span><span class="p">(</span>
+    <span class="n">hash_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">provider_uri</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;http://127.0.0.1:8545&quot;</span><span class="p">,</span>
+    <span class="n">lookback_blocks</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Checks the blockchain for transactions embedding the specified hash string.</span>
+<span class="sd">    Scans recent blocks (up to lookback_blocks). Returns a list of matches,</span>
+<span class="sd">    where each match contains block number and transaction information.</span>
+
+<span class="sd">    Note: This naive approach iterates over blocks in the given range. For</span>
+<span class="sd">    production usage, an indexer or a more direct method is recommended.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    hash_str : str</span>
+<span class="sd">        The hash string to search for on the blockchain.</span>
+<span class="sd">    provider_uri : str, optional</span>
+<span class="sd">        URI of the Ethereum node to connect to.</span>
+<span class="sd">    lookback_blocks : int, optional</span>
+<span class="sd">        Number of past blocks to scan from the latest block.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    list of dict</span>
+<span class="sd">        Each dict may contain information such as blockNumber, transactionHash, etc.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">Web3</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="s2">&quot;web3.py is not installed or not accessible.&quot;</span><span class="p">)</span>
+
+    <span class="n">w3</span> <span class="o">=</span> <span class="n">Web3</span><span class="p">(</span><span class="n">Web3</span><span class="o">.</span><span class="n">HTTPProvider</span><span class="p">(</span><span class="n">provider_uri</span><span class="p">))</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">w3</span><span class="o">.</span><span class="n">isConnected</span><span class="p">():</span>
+        <span class="k">raise</span> <span class="ne">ConnectionError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cannot connect to Ethereum node at </span><span class="si">{</span><span class="n">provider_uri</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">current_block</span> <span class="o">=</span> <span class="n">w3</span><span class="o">.</span><span class="n">eth</span><span class="o">.</span><span class="n">blockNumber</span>
+    <span class="n">earliest_block</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">current_block</span> <span class="o">-</span> <span class="n">lookback_blocks</span><span class="p">)</span>
+
+    <span class="n">matches</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">target_hex</span> <span class="o">=</span> <span class="n">w3</span><span class="o">.</span><span class="n">toHex</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">hash_str</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">block_num</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">earliest_block</span><span class="p">,</span> <span class="n">current_block</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">block</span> <span class="o">=</span> <span class="n">w3</span><span class="o">.</span><span class="n">eth</span><span class="o">.</span><span class="n">getBlock</span><span class="p">(</span><span class="n">block_num</span><span class="p">,</span> <span class="n">full_transactions</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">tx</span> <span class="ow">in</span> <span class="n">block</span><span class="o">.</span><span class="n">transactions</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">tx</span><span class="o">.</span><span class="n">input</span> <span class="o">==</span> <span class="n">target_hex</span><span class="p">:</span>
+                <span class="n">match_info</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s2">&quot;blockNumber&quot;</span><span class="p">:</span> <span class="n">block_num</span><span class="p">,</span>
+                    <span class="s2">&quot;transactionHash&quot;</span><span class="p">:</span> <span class="n">tx</span><span class="o">.</span><span class="n">hash</span><span class="o">.</span><span class="n">hex</span><span class="p">(),</span>
+                    <span class="s2">&quot;from&quot;</span><span class="p">:</span> <span class="n">tx</span><span class="p">[</span><span class="s2">&quot;from&quot;</span><span class="p">],</span>
+                    <span class="s2">&quot;to&quot;</span><span class="p">:</span> <span class="n">tx</span><span class="p">[</span><span class="s2">&quot;to&quot;</span><span class="p">],</span>
+                    <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">tx</span><span class="o">.</span><span class="n">input</span><span class="p">,</span>
+                <span class="p">}</span>
+                <span class="n">matches</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">match_info</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">matches</span></div>
+
+
+
+<span class="c1">########################################################################</span>
+<span class="c1"># Test Functions (pytest style)</span>
+<span class="c1">########################################################################</span>
+
+
+<div class="viewcode-block" id="test_store_content_plain">
+<a class="viewcode-back" href="../module_docs/owned.html#owned.test_store_content_plain">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_store_content_plain</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Tests storing unmodified content (no weaving). Asserts that the returned</span>
+<span class="sd">    hash matches the actual content hash, and that a file is created.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">test_data</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;hello world&quot;</span>
+    <span class="n">hash_key</span> <span class="o">=</span> <span class="n">store_content</span><span class="p">(</span><span class="n">test_data</span><span class="p">,</span> <span class="n">use_weave</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">DEFAULT_STORAGE_DIR</span> <span class="o">/</span> <span class="n">hash_key</span><span class="p">),</span> <span class="s2">&quot;File was not stored.&quot;</span>
+    <span class="c1"># Verify that re-hashing the stored file yields the same key</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">DEFAULT_STORAGE_DIR</span> <span class="o">/</span> <span class="n">hash_key</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">actual_data</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+    <span class="k">assert</span> <span class="n">sha256_hash</span><span class="p">(</span><span class="n">actual_data</span><span class="p">)</span> <span class="o">==</span> <span class="n">hash_key</span><span class="p">,</span> <span class="s2">&quot;Hash mismatch for stored file.&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="test_store_content_woven">
+<a class="viewcode-back" href="../module_docs/owned.html#owned.test_store_content_woven">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_store_content_woven</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Tests storing woven content. Asserts that the returned hash matches</span>
+<span class="sd">    the hash of the woven result and that the unweave function can recover</span>
+<span class="sd">    the original content.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">test_data</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;bob and alice&quot;</span>
+    <span class="n">hash_key</span> <span class="o">=</span> <span class="n">store_content</span><span class="p">(</span><span class="n">test_data</span><span class="p">,</span> <span class="n">extra_info</span><span class="o">=</span><span class="sa">b</span><span class="s2">&quot;my secret&quot;</span><span class="p">,</span> <span class="n">use_weave</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">DEFAULT_STORAGE_DIR</span> <span class="o">/</span> <span class="n">hash_key</span><span class="p">),</span> <span class="s2">&quot;File was not stored.&quot;</span>
+
+    <span class="c1"># Validate weaving/unweaving</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">DEFAULT_STORAGE_DIR</span> <span class="o">/</span> <span class="n">hash_key</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">stored_data</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+    <span class="n">original</span> <span class="o">=</span> <span class="n">unweave_content</span><span class="p">(</span><span class="n">stored_data</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">original</span> <span class="o">==</span> <span class="n">test_data</span><span class="p">,</span> <span class="s2">&quot;Woven/unwoven content does not match original.&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="test_post_and_verify_hash_on_blockchain">
+<a class="viewcode-back" href="../module_docs/owned.html#owned.test_post_and_verify_hash_on_blockchain">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_post_and_verify_hash_on_blockchain</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This test checks whether a hash can be posted and then verified on the</span>
+<span class="sd">    blockchain. These operations require a running Ethereum node and valid</span>
+<span class="sd">    credentials. If web3 or a node is not available, this test will likely fail.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">Web3</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># web3.py not installed; skip</span>
+        <span class="k">return</span>
+
+    <span class="n">sample_hash</span> <span class="o">=</span> <span class="s2">&quot;abc123def456&quot;</span>
+    <span class="c1"># The following call will require a valid from_address and private key</span>
+    <span class="c1"># post_hash_to_blockchain(hash_str=sample_hash, from_address=&quot;0x...&quot;, private_key=&quot;...&quot;)</span>
+
+    <span class="c1"># The verify step can be performed by scanning a range of recent blocks:</span>
+    <span class="c1"># results = verify_hash_on_blockchain(hash_str=sample_hash, lookback_blocks=100)</span>
+    <span class="c1"># For demonstration, not asserting here because it depends on environment availability.</span>
+    <span class="k">pass</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
