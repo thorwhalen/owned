@@ -296,4 +296,3 @@ def verify_hash_on_blockchain(
                 matches.append(match_info)
 
     return matches
-
