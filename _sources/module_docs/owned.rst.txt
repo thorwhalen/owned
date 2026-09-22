@@ -1,4 +1,0 @@
-owned
-=====
-.. automodule:: owned
-   :members:

@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "built_at": "2026-09-22T14:36:06Z",
+  "package": {
+    "name": "owned",
+    "version": "0.0.6",
+    "display_name": "owned",
+    "source": "pyproject.toml"
+  },
+  "git": {
+    "available": true,
+    "commit": "5c7061a701cc32c3d1a94bf6992c9b60cce3253c",
+    "short_commit": "5c7061a",
+    "branch": "master",
+    "tags": [],
+    "dirty": false,
+    "remote_url": "https://github.com/thorwhalen/owned",
+    "commit_url": "https://github.com/thorwhalen/owned/commit/5c7061a701cc32c3d1a94bf6992c9b60cce3253c",
+    "error": null
+  },
+  "ci": {
+    "provider": "github",
+    "repository": "thorwhalen/owned",
+    "sha": "5c7061a701cc32c3d1a94bf6992c9b60cce3253c",
+    "sha_in_history": true,
+    "ref": "refs/heads/master",
+    "ref_name": "master",
+    "run_id": "35741238780",
+    "run_url": "https://github.com/thorwhalen/owned/actions/runs/35741238780",
+    "server_url": "https://github.com"
+  },
+  "tools": {
+    "epythet": "0.2.12",
+    "sphinx": "9.1.0",
+    "docutils": "0.22.4",
+    "python": "3.12.14"
+  },
+  "config": {
+    "theme": "auto",
+    "html_theme": "furo",
+    "accent": "#6d408e",
+    "mode": "auto",
+    "api_generator": "autosummary",
+    "ignore": [
+      "tests/",
+      "scrap/",
+      "examples/"
+    ],
+    "agent_outputs": true,
+    "aggregates": [
+      "md"
+    ],
+    "ai_artifacts": true,
+    "provenance": true,
+    "docs_dir": "docsrc"
+  },
+  "site": {
+    "modules_documented": 1,
+    "objects_documented": 7
+  },
+  "pypi": {
+    "checked": true,
+    "latest": "0.0.7",
+    "relation": "behind",
+    "error": null
+  },
+  "reproduce": "git clone https://github.com/thorwhalen/owned && cd owned\ngit checkout 5c7061a701cc32c3d1a94bf6992c9b60cce3253c\npip install \"epythet==0.2.12\"\nepythet quickstart . --ignore tests/ scrap/ examples/",
+  "warnings": [],
+  "alignment": {
+    "aligned": false,
+    "notes": [
+      "The documented version (0.0.6) is behind the latest release on PyPI (0.0.7): `pip install owned` gives newer code than these docs describe."
+    ]
+  }
+}

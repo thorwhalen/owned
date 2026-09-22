@@ -1,0 +1,12 @@
+# owned
+
+> A little tool to manage secrets
+
+
+## Pages in this subsection
+
+- [owned](owned.html.md): A module that uses the ‘owner’ library to embed information into byte content (weaving)
+
+## Optional
+
+- [Top-level llms.txt](../llms.txt): Complete documentation index.

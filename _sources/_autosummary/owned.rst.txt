@@ -1,0 +1,18 @@
+﻿owned
+=====
+
+.. automodule:: owned
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      DFLT_HASH
+      post_hash_to_blockchain
+      sha256_hash
+      store_content
+      unweave_content
+      verify_hash_on_blockchain
+      weave_content
+   
